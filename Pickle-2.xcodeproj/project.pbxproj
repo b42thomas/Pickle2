@@ -454,6 +454,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "BIZNIT.Pickle-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -466,6 +467,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "BIZNIT.Pickle-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -538,6 +540,7 @@
 				FB78DA161E57DE5E001228E8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FB78DA171E57DE5E001228E8 /* Build configuration list for PBXNativeTarget "Pickle-2Tests" */ = {
 			isa = XCConfigurationList;
@@ -546,6 +549,7 @@
 				FB78DA191E57DE5E001228E8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FB78DA1A1E57DE5E001228E8 /* Build configuration list for PBXNativeTarget "Pickle-2UITests" */ = {
 			isa = XCConfigurationList;
@@ -554,6 +558,7 @@
 				FB78DA1C1E57DE5E001228E8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

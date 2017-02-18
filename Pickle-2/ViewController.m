@@ -34,7 +34,9 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    //MainMenuScene* mainMenu = [[MainMenuScene alloc] initWithSize:CGSizeMake(1024,768)];
     MainMenuScene* mainMenu = [[MainMenuScene alloc] initWithSize:self.view.bounds.size];
+    mainMenu.scaleMode = SKSceneScaleModeResizeFill;
     SKView *spriteView = (SKView *) self.view;
     [spriteView presentScene: mainMenu];
 }
