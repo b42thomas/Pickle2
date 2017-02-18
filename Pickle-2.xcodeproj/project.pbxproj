@@ -16,6 +16,8 @@
 		FB78DA051E57DE5E001228E8 /* Pickle_2Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB78DA041E57DE5E001228E8 /* Pickle_2Tests.m */; };
 		FB78DA101E57DE5E001228E8 /* Pickle_2UITests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB78DA0F1E57DE5E001228E8 /* Pickle_2UITests.m */; };
 		FB78DA1F1E57DF0E001228E8 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB78DA1E1E57DF0E001228E8 /* SpriteKit.framework */; };
+		FB78DA221E57F307001228E8 /* MainMenuScene.m in Sources */ = {isa = PBXBuildFile; fileRef = FB78DA211E57F307001228E8 /* MainMenuScene.m */; };
+		FB78DA241E57FD06001228E8 /* SIZED PICKLE ASSETS in Resources */ = {isa = PBXBuildFile; fileRef = FB78DA231E57FD06001228E8 /* SIZED PICKLE ASSETS */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,9 @@
 		FB78DA0F1E57DE5E001228E8 /* Pickle_2UITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Pickle_2UITests.m; sourceTree = "<group>"; };
 		FB78DA111E57DE5E001228E8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FB78DA1E1E57DF0E001228E8 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
+		FB78DA201E57F307001228E8 /* MainMenuScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuScene.h; sourceTree = "<group>"; };
+		FB78DA211E57F307001228E8 /* MainMenuScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuScene.m; sourceTree = "<group>"; };
+		FB78DA231E57FD06001228E8 /* SIZED PICKLE ASSETS */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "SIZED PICKLE ASSETS"; path = "../SIZED PICKLE ASSETS"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +89,7 @@
 		FB78D9DE1E57DE5D001228E8 = {
 			isa = PBXGroup;
 			children = (
+				FB78DA231E57FD06001228E8 /* SIZED PICKLE ASSETS */,
 				FB78D9E91E57DE5E001228E8 /* Pickle-2 */,
 				FB78DA031E57DE5E001228E8 /* Pickle-2Tests */,
 				FB78DA0E1E57DE5E001228E8 /* Pickle-2UITests */,
@@ -107,6 +113,8 @@
 			children = (
 				FB78D9ED1E57DE5E001228E8 /* AppDelegate.h */,
 				FB78D9EE1E57DE5E001228E8 /* AppDelegate.m */,
+				FB78DA201E57F307001228E8 /* MainMenuScene.h */,
+				FB78DA211E57F307001228E8 /* MainMenuScene.m */,
 				FB78D9F01E57DE5E001228E8 /* ViewController.h */,
 				FB78D9F11E57DE5E001228E8 /* ViewController.m */,
 				FB78D9F31E57DE5E001228E8 /* Main.storyboard */,
@@ -262,6 +270,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FB78D9FA1E57DE5E001228E8 /* LaunchScreen.storyboard in Resources */,
+				FB78DA241E57FD06001228E8 /* SIZED PICKLE ASSETS in Resources */,
 				FB78D9F71E57DE5E001228E8 /* Assets.xcassets in Resources */,
 				FB78D9F51E57DE5E001228E8 /* Main.storyboard in Resources */,
 			);
@@ -290,6 +299,7 @@
 			files = (
 				FB78D9F21E57DE5E001228E8 /* ViewController.m in Sources */,
 				FB78D9EF1E57DE5E001228E8 /* AppDelegate.m in Sources */,
+				FB78DA221E57F307001228E8 /* MainMenuScene.m in Sources */,
 				FB78D9EC1E57DE5E001228E8 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
