@@ -12,6 +12,8 @@
 
 @interface ViewController ()
 
+@property int characterSelectorView;
+
 @end
 
 @implementation ViewController
@@ -23,6 +25,7 @@
     spriteView.showsDrawCount = YES;
     spriteView.showsNodeCount = YES;
     spriteView.showsFPS = YES;
+
 }
 
 

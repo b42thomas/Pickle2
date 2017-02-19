@@ -13,6 +13,16 @@
 
 @interface MainMenuScene ()
 @property BOOL contentCreated;
+
+@property BOOL soundSettingsMenuVisible;
+@property BOOL characterMenuVisible;
+
+@property BOOL musicOn;
+@property BOOL soundOn;
+
+@property NSMutableArray *characterArray;
+@property int characterSelector;
+
 @end
 
 @implementation MainMenuScene
@@ -26,6 +36,18 @@
         [self createSceneContents];
         self.contentCreated = YES;
     }
+    if(!self.musicOn)
+    {
+        self.musicOn = YES;
+    }
+    if(!self.soundOn)
+    {
+        self.soundOn = YES;
+    }
+    [self.characterArray addObject:@"BlankCharacter-1"];
+    [self.characterArray addObject:@"PickleCharacter-1"];
+    
+    
 }
 
 - (void)createSceneContents
@@ -34,6 +56,68 @@
    // self.scaleMode = SKSceneScaleModeResizeFill;
     [self addChild: [self newMainMenu]];  //adds main menu to scene
 }
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    /* Called when a touch begins */
+    
+    for (UITouch *touch in touches) {
+        CGPoint location = [touch locationInNode:self];
+        SKSpriteNode *touchedNode = [self nodeAtPoint:location];
+        
+        //when buttons get pressed call a method and put all the work there
+        //**********PLAY BUTTON***********
+        if (touchedNode && [touchedNode.name isEqual:@"playButton"]) {
+            // move to game scene
+        }
+        
+        //***********SOUND SETTINGS******************
+        if (touchedNode && [touchedNode.name isEqual:@"gear"]&& !self.characterMenuVisible) {
+            // show
+            [self addsoundSettings];
+            self.soundSettingsMenuVisible = YES;
+        }
+        if (touchedNode && [touchedNode.name isEqual:@"exitButtonSSM"]) {
+            // show
+            [touchedNode.parent removeFromParent];
+            self.soundSettingsMenuVisible = NO;
+        }
+        if (touchedNode && [touchedNode.name isEqual:@"musicToggle"]) {
+            // show
+           if(self.musicOn==YES){
+            touchedNode.texture = [SKTexture textureWithImageNamed:@"UncheckedBox"];
+            self.musicOn = NO;
+           } else{
+               touchedNode.texture = [SKTexture textureWithImageNamed:@"CheckedBox"];
+               self.musicOn = YES;
+           }
+        }
+        if (touchedNode && [touchedNode.name isEqual:@"soundToggle"]) {
+            // show
+            if(self.soundOn==YES){
+                touchedNode.texture = [SKTexture textureWithImageNamed:@"UncheckedBox"];
+                self.soundOn = NO;
+            } else{
+                touchedNode.texture = [SKTexture textureWithImageNamed:@"CheckedBox"];
+                self.soundOn = YES;
+            }
+        }
+
+        //**********CHARACTER SELECT********************
+        if (touchedNode && [touchedNode.name isEqual:@"characterSelect"]&& !self.soundSettingsMenuVisible) {
+            // show
+            [self addCharacterMenu];
+            self.characterMenuVisible = YES;
+        }
+        if (touchedNode && [touchedNode.name isEqual:@"exitButtonCM"]) {
+            // show
+            [touchedNode.parent removeFromParent];
+            self.characterMenuVisible = NO;
+        }
+
+    }
+}
+
+
 
 -(SKSpriteNode *)newMainMenu  //method to create mainMenu Background image squraes should be filled in image
 {
@@ -45,18 +129,15 @@
     SKLabelNode *highScore = [self addHighScore];  //create highscore sprite
     SKLabelNode *lastScore = [self addLastScore];  //create lastscore sprite
     SKSpriteNode *gear = [self addGear];//create settings sprite
-    SKSpriteNode *soundSettings = [self addsoundSettings];//create settings sprite
     SKSpriteNode *characterSelectButton = [self addCharacterSelectButton];//create Character Select Sprite
-    SKSpriteNode *characterMenu = [self addCharacterMenu];//create Character Menu
     
  
     [mainMenu addChild:playButton];
     [mainMenu addChild:highScore];
     [mainMenu addChild:lastScore];
     [mainMenu addChild:gear];
-    //[mainMenu addChild:soundSettings];
     [mainMenu addChild:characterSelectButton];
-    [mainMenu addChild:characterMenu];
+
     
     
     
@@ -78,8 +159,6 @@
     gear.position = gpos;
     //position for soundSettings and Character menu
     CGPoint sspos = CGPointMake( x*0.25, y*0.25);
-    soundSettings.position = sspos;
-    characterMenu.position = sspos;
     //position for character Select button
     CGPoint csbpos = CGPointMake( x*0.73, y*0.22);
     characterSelectButton.position = csbpos;
@@ -90,9 +169,6 @@
     playButton.size = CGSizeMake(parentFrame.size.width*0.10,parentFrame.size.height*0.175);
     //gear size
     gear.size = CGSizeMake(parentFrame.size.width*0.05,parentFrame.size.height*0.09);
-    //sound settings menu size and character menu size
-    soundSettings.size = CGSizeMake(parentFrame.size.width*0.45,parentFrame.size.height*0.45);
-    characterMenu.size = CGSizeMake(parentFrame.size.width*0.45,parentFrame.size.height*0.45);
     //character select button size
     characterSelectButton.size = CGSizeMake(parentFrame.size.width*0.05,parentFrame.size.height*0.09);
     
@@ -141,12 +217,19 @@
     return gear;
 }
 
--(SKSpriteNode*)addsoundSettings
+-(void)addsoundSettings
 {
+    
+    CGRect parentFrame = self.frame;
+    CGFloat x = CGRectGetMaxX(parentFrame);
+    CGFloat y = CGRectGetMaxY(parentFrame);
+    CGPoint sspos = CGPointMake( x*0.25, y*0.25);
+    
     SKSpriteNode *soundSettings = [SKSpriteNode spriteNodeWithImageNamed:@"SoundOptionsMenu"];
     [soundSettings setName:@"soundSettings"];
     soundSettings.anchorPoint = CGPointMake(0,0);
     soundSettings.size = CGSizeMake(self.frame.size.width*0.45,self.frame.size.height*0.45);
+    soundSettings.position = sspos;
     
     SKSpriteNode *musicToggle = [self addBox];
     SKSpriteNode *soundToggle = [self addBox];
@@ -160,9 +243,9 @@
     [soundSettings addChild:soundToggle];
     [soundSettings addChild:exitButton];
 
-    CGRect parentFrame = soundSettings.frame;
-    CGFloat x = CGRectGetMaxX(parentFrame);
-    CGFloat y = CGRectGetMaxY(parentFrame);
+    parentFrame = soundSettings.frame;
+    x = parentFrame.size.width;
+    y = parentFrame.size.height;
    
     //sound toggle box pos and size
     soundToggle.position = CGPointMake(x*0.75, y*0.35);
@@ -177,15 +260,23 @@
     
     
 
-    
-    return soundSettings;
+    [self addChild:soundSettings];
+   // return soundSettings;
     
     
     
 }
+
+-(void)removeSoundsSettings
+{
+    
+    
+}
+
+
 -(SKSpriteNode *) addBox
 {
-    SKSpriteNode *box = [SKSpriteNode spriteNodeWithImageNamed:@"UncheckedBox"];
+    SKSpriteNode *box = [SKSpriteNode spriteNodeWithImageNamed:@"CheckedBox"];
     return box;
 }
 
@@ -198,46 +289,80 @@
     return characterSelectButton;
 }
 
--(SKSpriteNode*)addCharacterMenu
+-(void)addCharacterMenu
 {
+    
+    CGRect parentFrame = self.frame;
+    CGFloat x = CGRectGetMaxX(parentFrame);
+    CGFloat y = CGRectGetMaxY(parentFrame);
+    CGPoint sspos = CGPointMake( x*0.25, y*0.25);
+    
+    
     SKSpriteNode *characterMenu = [SKSpriteNode spriteNodeWithImageNamed:@"characterMenu"];
     [characterMenu setName:@"characterMenu"];
     characterMenu.anchorPoint = CGPointMake(0,0);
     characterMenu.size = CGSizeMake(self.frame.size.width*0.45,self.frame.size.height*0.45);
+    characterMenu.position = sspos;
     
     SKSpriteNode *exitButton = [SKSpriteNode spriteNodeWithImageNamed:@"ExitButton"];
-    SKSpriteNode *leftButton = [SKSpriteNode spriteNodeWithImageNamed:@"PlayButton"];
-    SKSpriteNode *rightButton = [SKSpriteNode spriteNodeWithImageNamed:@"PlayButton"];
+    SKSpriteNode *leftButton = [[SKSpriteNode alloc] initWithColor:[SKColor clearColor] size:CGSizeMake(characterMenu.frame.size.width*0.3, characterMenu.frame.size.height)];
+    SKSpriteNode *rightButton = [[SKSpriteNode alloc] initWithColor:[SKColor clearColor] size:CGSizeMake(characterMenu.frame.size.width*0.3, characterMenu.frame.size.height)];
+    SKSpriteNode *leftButtonImage = [SKSpriteNode spriteNodeWithImageNamed:@"PlayButton"];
+    SKSpriteNode *rightButtonImage = [SKSpriteNode spriteNodeWithImageNamed:@"PlayButton"];
     
-    [exitButton setName:@"exitButtonSSM"];
+    [exitButton setName:@"exitButtonCM"];
     [leftButton setName:@"leftButton"];
     [rightButton setName:@"rightButton"];
     
     [characterMenu addChild:exitButton];
     [characterMenu addChild:leftButton];
-    //[characterMenu addChild:rightButton];
+    [leftButton addChild:leftButtonImage];
+    [characterMenu addChild:rightButton];
+    [rightButton addChild:rightButtonImage];
     
-    CGRect parentFrame = characterMenu.frame;
-    CGFloat x = CGRectGetMaxX(parentFrame);
-    CGFloat y = CGRectGetMaxY(parentFrame);
+    parentFrame = characterMenu.frame;
+    x = parentFrame.size.width;
+    y = parentFrame.size.height;
     
     //exit button pos and size
     exitButton.anchorPoint = CGPointMake(1, 1);
     exitButton.position = CGPointMake(x*0, y);
     exitButton.size = CGSizeMake(parentFrame.size.width*0.15,parentFrame.size.height*0.23);
-    //left button pos and size
-    leftButton.anchorPoint = CGPointMake(0.5, 0.5);
-    leftButton.position = CGPointMake(x*0.15, y*0.5);
-    leftButton.size = CGSizeMake(-(parentFrame.size.width*0.15),parentFrame.size.height*0.23);
+    //left button area pos and size
+    leftButton.anchorPoint = CGPointMake(0, 0);
+    leftButton.position = CGPointMake(x*0, y*0);
+    leftButtonImage.size = CGSizeMake(-(parentFrame.size.width*0.15),parentFrame.size.height*0.23);
+    //right button pos and size
+    rightButton.anchorPoint = CGPointMake(0, 0);
+    rightButtonImage.size = CGSizeMake((parentFrame.size.width*0.15),parentFrame.size.height*0.23);
+    rightButton.position = CGPointMake(x-rightButton.size.width, y*0);
+    
+    parentFrame = leftButton.frame;
+    x = CGRectGetMaxX(parentFrame);
+    y = CGRectGetMaxY(parentFrame);
+    //left button image pos
+    leftButtonImage.anchorPoint = CGPointMake(0.5, 0.5);
+    leftButtonImage.position = CGPointMake(x/2, y/2);
+    
+    parentFrame = rightButton.frame;
+    x = CGRectGetMaxX(parentFrame);
+    y = CGRectGetMaxY(parentFrame);
+    //left button image pos
+    rightButtonImage.anchorPoint = CGPointMake(0.5, 0.5);
+    rightButtonImage.position = CGPointMake(x/7, y/2);
+
     
     
     
-    
-    return characterMenu;
+    [self addChild:characterMenu];
+    //return characterMenu;
     
     
     
 }
+
+
+
 
 
 
