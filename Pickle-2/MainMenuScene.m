@@ -9,7 +9,7 @@
 //code to create main menu goes here
 
 #import "MainMenuScene.h"
-
+#import "RWGameData.h"
 
 @interface MainMenuScene ()
 @property BOOL contentCreated;
@@ -20,8 +20,9 @@
 @property BOOL musicOn;
 @property BOOL soundOn;
 
-@property NSMutableArray *characterArray;
-@property int characterSelector;
+
+@property  NSArray *characterSelection; //= [NSArray array];
+@property  SKTextureAtlas *characterAtlas;// = [SKTextureAtlas atlasNamed:@"CharacterAtlas"];
 
 @end
 
@@ -44,10 +45,16 @@
     {
         self.soundOn = YES;
     }
-    [self.characterArray addObject:@"BlankCharacter-1"];
-    [self.characterArray addObject:@"PickleCharacter-1"];
     
+    //*****THIS IS HOW WE ADD CHARACTERS TO A SCENE********
+    self.characterAtlas = [SKTextureAtlas atlasNamed:@"MMChars"];
+
+    SKTexture *c0 = [self.characterAtlas textureNamed:@"0BlankCharacter-1"];
+    SKTexture *c1 = [self.characterAtlas textureNamed:@"1PickleCharacter-1"];
     
+    self.characterSelection = @[c0,c1];
+    int ci = [RWGameData sharedGameData].characterIndex;
+    SKSpriteNode *test = [SKSpriteNode spriteNodeWithTexture:self.characterSelection[ci]];
 }
 
 - (void)createSceneContents
@@ -56,9 +63,10 @@
    // self.scaleMode = SKSceneScaleModeResizeFill;
     [self addChild: [self newMainMenu]];  //adds main menu to scene
 }
-
+                                                        //*********START TOUCHES BEGAN*************//
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     /* Called when a touch begins */
+    
     
     for (UITouch *touch in touches) {
         CGPoint location = [touch locationInNode:self];
@@ -113,9 +121,55 @@
             [touchedNode.parent removeFromParent];
             self.characterMenuVisible = NO;
         }
+       if (touchedNode && [touchedNode.name isEqual:@"rightButton"]) {
+                //NSLog(@"rightButton touched");
+            [self nextCharacter];
+           
+     
+     
+            }//end touch if
+        if (touchedNode && [touchedNode.name isEqual:@"leftButton"]) {
+            //NSLog(@"leftButton touched");
+           [self previousCharacter];
+            
+            
+        }//end touch if
 
+        }//end for loop
+}//end touchBegan
+
+                                                            //*********END TOUCHES BEGAN*************//
+
+//right button is pressed
+-(void)nextCharacter
+{
+    
+    if(self.characterSelection[[RWGameData sharedGameData].characterIndex] != [self.characterSelection lastObject])
+    {
+        [RWGameData sharedGameData].characterIndex++;
+        [self childNodeWithName:@"characterMenu"].removeFromParent;
+        [self addCharacterMenu];
+        NSLog(@"should change char");
     }
+    
+    
 }
+//left button is pressed
+-(void)previousCharacter
+{
+    
+    if(self.characterSelection[[RWGameData sharedGameData].characterIndex] != [self.characterSelection firstObject])
+    {
+        [RWGameData sharedGameData].characterIndex--;
+        [self childNodeWithName:@"characterMenu"].removeFromParent;
+        [self addCharacterMenu];
+        NSLog(@"should change char");
+    }
+    
+    
+}
+
+
 
 
 
@@ -190,7 +244,7 @@
 {
     SKLabelNode *highScore = [SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
     highScore.color = [SKColor whiteColor];
-    highScore.text = @"99";
+    highScore.text = [NSString stringWithFormat:@"%ld",[RWGameData sharedGameData].highScore];
     highScore.fontSize = 76;
     [highScore setName:@"highScore"];
        return highScore;
@@ -201,7 +255,7 @@
 {
     SKLabelNode *lastScore = [SKLabelNode labelNodeWithFontNamed:@"Chalkduster"];
     lastScore.color = [SKColor whiteColor];
-    lastScore.text = @"00";
+    lastScore.text = [NSString stringWithFormat:@"%ld",[RWGameData sharedGameData].score];
     lastScore.fontSize = 76;
     lastScore.position = CGPointMake(CGRectGetMidX(lastScore.parent.frame) + 160,CGRectGetMidY(lastScore.parent.frame)-15);
     [lastScore setName:@"lastScore"];
@@ -289,8 +343,31 @@
     return characterSelectButton;
 }
 
+-(NSArray *)getTextureArray
+{
+    //Creat atlas for character selection
+    self.characterAtlas = [SKTextureAtlas atlasNamed:@"MMChars"];
+    //manually add new characters here..
+    SKTexture *c0 = [self.characterAtlas textureNamed:@"0BlankCharacter-1"];
+    SKTexture *c1 = [self.characterAtlas textureNamed:@"1PickleCharacter-1"];
+    //..and then here
+    self.characterSelection = @[c0,c1];
+
+    return self.characterSelection;
+    
+}
+
+-(int)getCharIndex
+{
+    int ci = [RWGameData sharedGameData].characterIndex;
+    return ci;
+}
+
 -(void)addCharacterMenu
 {
+    
+    NSArray *charSelect = [self getTextureArray];
+    
     
     CGRect parentFrame = self.frame;
     CGFloat x = CGRectGetMaxX(parentFrame);
@@ -304,6 +381,22 @@
     characterMenu.size = CGSizeMake(self.frame.size.width*0.45,self.frame.size.height*0.45);
     characterMenu.position = sspos;
     
+    parentFrame = characterMenu.frame;
+    x = parentFrame.size.width;
+    y = parentFrame.size.height;
+    
+    //center image, charater selected
+    //int ci = [RWGameData sharedGameData].characterIndex;
+    SKSpriteNode *characterSelected = [SKSpriteNode spriteNodeWithTexture:[charSelect objectAtIndex:[self getCharIndex]]];
+    //NSLog(@"Value of characterArray[1] is %@", self.characterArray.firstObject);
+    [characterSelected setName:@"name"];
+    characterSelected.anchorPoint = CGPointMake(0.5, 0.5);
+    characterSelected.size = CGSizeMake(parentFrame.size.width*0.35,parentFrame.size.height*0.65);
+    characterSelected.position = CGPointMake(x/2, y/2);
+    SKSpriteNode *characterChild = [SKSpriteNode spriteNodeWithColor:[SKColor clearColor] size:CGSizeMake(0, 0)];
+    [characterChild setName:@"characterChild"];
+    
+    //left and right buttons, using playbutton images
     SKSpriteNode *exitButton = [SKSpriteNode spriteNodeWithImageNamed:@"ExitButton"];
     SKSpriteNode *leftButton = [[SKSpriteNode alloc] initWithColor:[SKColor clearColor] size:CGSizeMake(characterMenu.frame.size.width*0.3, characterMenu.frame.size.height)];
     SKSpriteNode *rightButton = [[SKSpriteNode alloc] initWithColor:[SKColor clearColor] size:CGSizeMake(characterMenu.frame.size.width*0.3, characterMenu.frame.size.height)];
@@ -313,46 +406,52 @@
     [exitButton setName:@"exitButtonCM"];
     [leftButton setName:@"leftButton"];
     [rightButton setName:@"rightButton"];
+    [leftButtonImage setName:@"leftButtonImage"];
+    [rightButtonImage setName:@"rightButtonImage"];
     
+    
+    //ADD CHILD
     [characterMenu addChild:exitButton];
-    [characterMenu addChild:leftButton];
-    [leftButton addChild:leftButtonImage];
-    [characterMenu addChild:rightButton];
-    [rightButton addChild:rightButtonImage];
     
-    parentFrame = characterMenu.frame;
-    x = parentFrame.size.width;
-    y = parentFrame.size.height;
+    [characterMenu addChild:leftButtonImage];
+    [leftButtonImage addChild:leftButton];
+    
+    [characterMenu addChild:rightButtonImage];
+    [rightButtonImage addChild:rightButton];
+    [characterMenu addChild:characterSelected];
+    
+    [characterSelected addChild:characterChild];
+    
+    
     
     //exit button pos and size
     exitButton.anchorPoint = CGPointMake(1, 1);
     exitButton.position = CGPointMake(x*0, y);
     exitButton.size = CGSizeMake(parentFrame.size.width*0.15,parentFrame.size.height*0.23);
     //left button area pos and size
-    leftButton.anchorPoint = CGPointMake(0, 0);
+    leftButton.anchorPoint = CGPointMake(0.5, 0.5);
     leftButton.position = CGPointMake(x*0, y*0);
     leftButtonImage.size = CGSizeMake(-(parentFrame.size.width*0.15),parentFrame.size.height*0.23);
     //right button pos and size
-    rightButton.anchorPoint = CGPointMake(0, 0);
+    rightButton.anchorPoint = CGPointMake(0.5, 0.5);
     rightButtonImage.size = CGSizeMake((parentFrame.size.width*0.15),parentFrame.size.height*0.23);
-    rightButton.position = CGPointMake(x-rightButton.size.width, y*0);
+    rightButton.position = CGPointMake(0,0);
     
-    parentFrame = leftButton.frame;
-    x = CGRectGetMaxX(parentFrame);
-    y = CGRectGetMaxY(parentFrame);
+    //parentFrame = leftButton.frame;
+   // x = CGRectGetMaxX(parentFrame);
+   // y = CGRectGetMaxY(parentFrame);
     //left button image pos
     leftButtonImage.anchorPoint = CGPointMake(0.5, 0.5);
-    leftButtonImage.position = CGPointMake(x/2, y/2);
+    leftButtonImage.position = CGPointMake(x*0.15, y/2);
     
-    parentFrame = rightButton.frame;
-    x = CGRectGetMaxX(parentFrame);
-    y = CGRectGetMaxY(parentFrame);
+  //  parentFrame = rightButton.frame;
+   // x = CGRectGetMaxX(parentFrame);
+   // y = CGRectGetMaxY(parentFrame);
     //left button image pos
     rightButtonImage.anchorPoint = CGPointMake(0.5, 0.5);
-    rightButtonImage.position = CGPointMake(x/7, y/2);
+    rightButtonImage.position = CGPointMake(x*0.85, y/2);
 
-    
-    
+
     
     [self addChild:characterMenu];
     //return characterMenu;
@@ -360,8 +459,6 @@
     
     
 }
-
-
 
 
 

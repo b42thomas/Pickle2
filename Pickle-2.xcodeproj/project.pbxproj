@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FB03FC071E5AA85C006DDDD1 /* RWGameData.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03FC061E5AA85C006DDDD1 /* RWGameData.m */; };
+		FB03FC0D1E5AB35D006DDDD1 /* MMCharSelect.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03FC0C1E5AB35D006DDDD1 /* MMCharSelect.m */; };
+		FB03FC0F1E5AB5DC006DDDD1 /* MMChars.atlas in Resources */ = {isa = PBXBuildFile; fileRef = FB03FC0E1E5AB5DC006DDDD1 /* MMChars.atlas */; };
 		FB78D9EC1E57DE5E001228E8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FB78D9EB1E57DE5E001228E8 /* main.m */; };
 		FB78D9EF1E57DE5E001228E8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FB78D9EE1E57DE5E001228E8 /* AppDelegate.m */; };
 		FB78D9F21E57DE5E001228E8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB78D9F11E57DE5E001228E8 /* ViewController.m */; };
@@ -38,6 +41,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FB03FC051E5AA85C006DDDD1 /* RWGameData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWGameData.h; sourceTree = "<group>"; };
+		FB03FC061E5AA85C006DDDD1 /* RWGameData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RWGameData.m; sourceTree = "<group>"; };
+		FB03FC0B1E5AB35D006DDDD1 /* MMCharSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMCharSelect.h; sourceTree = "<group>"; };
+		FB03FC0C1E5AB35D006DDDD1 /* MMCharSelect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMCharSelect.m; sourceTree = "<group>"; };
+		FB03FC0E1E5AB5DC006DDDD1 /* MMChars.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = MMChars.atlas; sourceTree = "<group>"; };
 		FB78D9E71E57DE5E001228E8 /* Pickle-2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pickle-2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB78D9EB1E57DE5E001228E8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		FB78D9ED1E57DE5E001228E8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -111,12 +119,17 @@
 		FB78D9E91E57DE5E001228E8 /* Pickle-2 */ = {
 			isa = PBXGroup;
 			children = (
+				FB03FC0E1E5AB5DC006DDDD1 /* MMChars.atlas */,
 				FB78D9ED1E57DE5E001228E8 /* AppDelegate.h */,
 				FB78D9EE1E57DE5E001228E8 /* AppDelegate.m */,
 				FB78DA201E57F307001228E8 /* MainMenuScene.h */,
 				FB78DA211E57F307001228E8 /* MainMenuScene.m */,
+				FB03FC0B1E5AB35D006DDDD1 /* MMCharSelect.h */,
+				FB03FC0C1E5AB35D006DDDD1 /* MMCharSelect.m */,
 				FB78D9F01E57DE5E001228E8 /* ViewController.h */,
 				FB78D9F11E57DE5E001228E8 /* ViewController.m */,
+				FB03FC051E5AA85C006DDDD1 /* RWGameData.h */,
+				FB03FC061E5AA85C006DDDD1 /* RWGameData.m */,
 				FB78D9F31E57DE5E001228E8 /* Main.storyboard */,
 				FB78D9F61E57DE5E001228E8 /* Assets.xcassets */,
 				FB78D9F81E57DE5E001228E8 /* LaunchScreen.storyboard */,
@@ -271,6 +284,7 @@
 			files = (
 				FB78D9FA1E57DE5E001228E8 /* LaunchScreen.storyboard in Resources */,
 				FB78DA241E57FD06001228E8 /* SIZED PICKLE ASSETS in Resources */,
+				FB03FC0F1E5AB5DC006DDDD1 /* MMChars.atlas in Resources */,
 				FB78D9F71E57DE5E001228E8 /* Assets.xcassets in Resources */,
 				FB78D9F51E57DE5E001228E8 /* Main.storyboard in Resources */,
 			);
@@ -298,9 +312,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				FB78D9F21E57DE5E001228E8 /* ViewController.m in Sources */,
+				FB03FC071E5AA85C006DDDD1 /* RWGameData.m in Sources */,
 				FB78D9EF1E57DE5E001228E8 /* AppDelegate.m in Sources */,
 				FB78DA221E57F307001228E8 /* MainMenuScene.m in Sources */,
 				FB78D9EC1E57DE5E001228E8 /* main.m in Sources */,
+				FB03FC0D1E5AB35D006DDDD1 /* MMCharSelect.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +416,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				"Texture Atlas Maximum Size" = 4096x4096;
 			};
 			name = Debug;
 		};
@@ -441,6 +458,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				"Texture Atlas Maximum Size" = 4096x4096;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
