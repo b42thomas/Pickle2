@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AVFoundation/AVAudioPlayer.h"
 
 @interface RWGameData : NSObject
 
@@ -16,6 +17,11 @@
 @property (assign, nonatomic) int characterIndex;
 //@property (assign,nonatomic) NSArray* characterArray;// = @[@"BlankCharacter-1", @"PickleCharacter-1"];
 
+@property (assign, nonatomic) BOOL musicIsOn;
+@property (assign, nonatomic) BOOL soundIsOn;
+
+@property AVAudioPlayer* musicPlayer;
+@property AVAudioPlayer* soundPlayer;
 
 
 //@property (assign, nonatomic) long totalDistance;

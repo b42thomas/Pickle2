@@ -13,6 +13,7 @@
 //characterArray = @[@"BlankCharacter-1", @"PickleCharacter-1"];
 
 
+
 + (instancetype)sharedGameData {
     static id sharedInstance = nil;
     

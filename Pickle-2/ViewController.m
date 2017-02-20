@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import <SpriteKit/SpriteKit.h>
 #import "MainMenuScene.h"
+#import "RWGameData.h"
+
 
 @interface ViewController ()
 
@@ -25,7 +27,11 @@
     spriteView.showsDrawCount = YES;
     spriteView.showsNodeCount = YES;
     spriteView.showsFPS = YES;
-
+    
+    [RWGameData sharedGameData].musicIsOn = YES;
+    [RWGameData sharedGameData].soundIsOn = YES;
+    
+    
 }
 
 

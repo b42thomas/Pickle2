@@ -10,6 +10,7 @@
 
 #import "MainMenuScene.h"
 #import "RWGameData.h"
+#import "AVFoundation/AVAudioPlayer.h"
 
 @interface MainMenuScene ()
 @property BOOL contentCreated;
@@ -19,6 +20,8 @@
 
 @property BOOL musicOn;
 @property BOOL soundOn;
+
+
 
 
 @property  NSArray *characterSelection; //= [NSArray array];
@@ -37,24 +40,28 @@
         [self createSceneContents];
         self.contentCreated = YES;
     }
-    if(!self.musicOn)
+    if(![RWGameData sharedGameData].musicIsOn)
     {
-        self.musicOn = YES;
+        [RWGameData sharedGameData].musicIsOn = YES;
     }
-    if(!self.soundOn)
+    if(![RWGameData sharedGameData].soundIsOn)
     {
-        self.soundOn = YES;
+       [RWGameData sharedGameData].soundIsOn = YES;
     }
+    NSString *path = [NSString stringWithFormat:@"%@/takeMeOutToTheBallGame.m4a", [[NSBundle mainBundle] resourcePath]];
+    NSURL *soundUrl = [NSURL fileURLWithPath:path];
     
-    //*****THIS IS HOW WE ADD CHARACTERS TO A SCENE********
-    self.characterAtlas = [SKTextureAtlas atlasNamed:@"MMChars"];
+    [RWGameData sharedGameData].musicPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundUrl fileTypeHint:@"m4a" error:nil];
+    
+    path = [NSString stringWithFormat:@"%@/3..2..1..Start 12.m4a", [[NSBundle mainBundle] resourcePath]];
+    soundUrl = [NSURL fileURLWithPath:path];
+    
+    [RWGameData sharedGameData].soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundUrl fileTypeHint:@"m4a" error:nil];
 
-    SKTexture *c0 = [self.characterAtlas textureNamed:@"0BlankCharacter-1"];
-    SKTexture *c1 = [self.characterAtlas textureNamed:@"1PickleCharacter-1"];
+    [[RWGameData sharedGameData].musicPlayer prepareToPlay];
+    [[RWGameData sharedGameData].musicPlayer play];
     
-    self.characterSelection = @[c0,c1];
-    int ci = [RWGameData sharedGameData].characterIndex;
-    SKSpriteNode *test = [SKSpriteNode spriteNodeWithTexture:self.characterSelection[ci]];
+    
 }
 
 - (void)createSceneContents
@@ -76,6 +83,8 @@
         //**********PLAY BUTTON***********
         if (touchedNode && [touchedNode.name isEqual:@"playButton"]) {
             // move to game scene
+            [[RWGameData sharedGameData].musicPlayer stop];
+            [[RWGameData sharedGameData].soundPlayer play];
         }
         
         //***********SOUND SETTINGS******************
@@ -91,22 +100,26 @@
         }
         if (touchedNode && [touchedNode.name isEqual:@"musicToggle"]) {
             // show
-           if(self.musicOn==YES){
+           if([RWGameData sharedGameData].musicIsOn==YES){
             touchedNode.texture = [SKTexture textureWithImageNamed:@"UncheckedBox"];
-            self.musicOn = NO;
+               [RWGameData sharedGameData].musicIsOn = NO;
+               [RWGameData sharedGameData].musicPlayer.volume = 0;
            } else{
                touchedNode.texture = [SKTexture textureWithImageNamed:@"CheckedBox"];
-               self.musicOn = YES;
+               [RWGameData sharedGameData].musicIsOn = YES;
+               [RWGameData sharedGameData].musicPlayer.volume = 1;
            }
         }
         if (touchedNode && [touchedNode.name isEqual:@"soundToggle"]) {
             // show
-            if(self.soundOn==YES){
+            if([RWGameData sharedGameData].soundIsOn==YES){
                 touchedNode.texture = [SKTexture textureWithImageNamed:@"UncheckedBox"];
-                self.soundOn = NO;
+                [RWGameData sharedGameData].soundIsOn = NO;
+                [RWGameData sharedGameData].soundPlayer.volume = 0;
             } else{
                 touchedNode.texture = [SKTexture textureWithImageNamed:@"CheckedBox"];
-                self.soundOn = YES;
+                [RWGameData sharedGameData].soundIsOn = YES;
+                [RWGameData sharedGameData].soundPlayer.volume = 1;
             }
         }
 
@@ -144,7 +157,7 @@
 -(void)nextCharacter
 {
     
-    if(self.characterSelection[[RWGameData sharedGameData].characterIndex] != [self.characterSelection lastObject])
+    if([RWGameData sharedGameData].characterIndex != [self.characterSelection indexOfObject:[self.characterSelection lastObject]])
     {
         [RWGameData sharedGameData].characterIndex++;
         [self childNodeWithName:@"characterMenu"].removeFromParent;
@@ -158,7 +171,7 @@
 -(void)previousCharacter
 {
     
-    if(self.characterSelection[[RWGameData sharedGameData].characterIndex] != [self.characterSelection firstObject])
+    if([RWGameData sharedGameData].characterIndex != [self.characterSelection indexOfObject:[self.characterSelection firstObject]])
     {
         [RWGameData sharedGameData].characterIndex--;
         [self childNodeWithName:@"characterMenu"].removeFromParent;
@@ -285,8 +298,21 @@
     soundSettings.size = CGSizeMake(self.frame.size.width*0.45,self.frame.size.height*0.45);
     soundSettings.position = sspos;
     
-    SKSpriteNode *musicToggle = [self addBox];
-    SKSpriteNode *soundToggle = [self addBox];
+    SKSpriteNode *musicToggle = [SKSpriteNode alloc];
+    SKSpriteNode *soundToggle = [SKSpriteNode alloc];
+    
+    if ([RWGameData sharedGameData].musicIsOn){
+        musicToggle = [self addCheckedBox];
+    } else {
+        musicToggle = [self addUnCheckedBox];
+    }
+    if ([RWGameData sharedGameData].soundIsOn){
+        soundToggle = [self addCheckedBox];
+    } else {
+        soundToggle = [self addUnCheckedBox];
+    }
+    
+    
     SKSpriteNode *exitButton = [SKSpriteNode spriteNodeWithImageNamed:@"ExitButton"];
     
     [musicToggle setName:@"musicToggle"];
@@ -328,11 +354,17 @@
 }
 
 
--(SKSpriteNode *) addBox
+-(SKSpriteNode *) addCheckedBox
 {
     SKSpriteNode *box = [SKSpriteNode spriteNodeWithImageNamed:@"CheckedBox"];
     return box;
 }
+-(SKSpriteNode *) addUnCheckedBox
+{
+    SKSpriteNode *box = [SKSpriteNode spriteNodeWithImageNamed:@"UncheckedBox"];
+    return box;
+}
+
 
 -(SKSpriteNode *)addCharacterSelectButton
 {
@@ -345,13 +377,22 @@
 
 -(NSArray *)getTextureArray
 {
-    //Creat atlas for character selection
+    //*****THIS IS HOW WE ADD CHARACTERS TO A SCENE********
     self.characterAtlas = [SKTextureAtlas atlasNamed:@"MMChars"];
-    //manually add new characters here..
-    SKTexture *c0 = [self.characterAtlas textureNamed:@"0BlankCharacter-1"];
-    SKTexture *c1 = [self.characterAtlas textureNamed:@"1PickleCharacter-1"];
-    //..and then here
-    self.characterSelection = @[c0,c1];
+    
+    NSString *s0 = [NSString stringWithFormat:@"Blank 0-1"];
+    NSString *s1 = [NSString stringWithFormat:@"Outfit 4-1"];
+    NSString *s2 = [NSString stringWithFormat:@"Girl 2-1"];
+    NSString *s3 = [NSString stringWithFormat:@"Hat 3-1"];
+    NSString *s4 = [NSString stringWithFormat:@"Pickle 11-1"];
+    NSString *s5 = [NSString stringWithFormat:@"Rollerblade 10-1"];
+    NSString *s6 = [NSString stringWithFormat:@"Gingerbread 6-1"];
+    NSString *s7 = [NSString stringWithFormat:@"Astronaut 7-1"];
+    NSString *s8 = [NSString stringWithFormat:@"Vampire 8-1"];
+    NSString *s9 = [NSString stringWithFormat:@"Wizard 9-1"];
+    
+    
+    self.characterSelection = @[s0,s1,s2,s3,s4,s5,s6,s7,s8,s9];
 
     return self.characterSelection;
     
@@ -387,12 +428,12 @@
     
     //center image, charater selected
     //int ci = [RWGameData sharedGameData].characterIndex;
-    SKSpriteNode *characterSelected = [SKSpriteNode spriteNodeWithTexture:[charSelect objectAtIndex:[self getCharIndex]]];
+    SKSpriteNode *characterSelected = [SKSpriteNode spriteNodeWithImageNamed:[charSelect objectAtIndex:[self getCharIndex]]];
     //NSLog(@"Value of characterArray[1] is %@", self.characterArray.firstObject);
     [characterSelected setName:@"name"];
     characterSelected.anchorPoint = CGPointMake(0.5, 0.5);
-    characterSelected.size = CGSizeMake(parentFrame.size.width*0.35,parentFrame.size.height*0.65);
-    characterSelected.position = CGPointMake(x/2, y/2);
+    characterSelected.size = CGSizeMake(2*parentFrame.size.width*0.35,2*parentFrame.size.height*0.65);
+    characterSelected.position = CGPointMake(x/2, y/2.2);
     SKSpriteNode *characterChild = [SKSpriteNode spriteNodeWithColor:[SKColor clearColor] size:CGSizeMake(0, 0)];
     [characterChild setName:@"characterChild"];
     
@@ -402,6 +443,8 @@
     SKSpriteNode *rightButton = [[SKSpriteNode alloc] initWithColor:[SKColor clearColor] size:CGSizeMake(characterMenu.frame.size.width*0.3, characterMenu.frame.size.height)];
     SKSpriteNode *leftButtonImage = [SKSpriteNode spriteNodeWithImageNamed:@"PlayButton"];
     SKSpriteNode *rightButtonImage = [SKSpriteNode spriteNodeWithImageNamed:@"PlayButton"];
+    leftButton.zPosition = 1;
+    rightButton.zPosition = 1;
     
     [exitButton setName:@"exitButtonCM"];
     [leftButton setName:@"leftButton"];

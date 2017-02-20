@@ -9,7 +9,13 @@
 /* Begin PBXBuildFile section */
 		FB03FC071E5AA85C006DDDD1 /* RWGameData.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03FC061E5AA85C006DDDD1 /* RWGameData.m */; };
 		FB03FC0D1E5AB35D006DDDD1 /* MMCharSelect.m in Sources */ = {isa = PBXBuildFile; fileRef = FB03FC0C1E5AB35D006DDDD1 /* MMCharSelect.m */; };
-		FB03FC0F1E5AB5DC006DDDD1 /* MMChars.atlas in Resources */ = {isa = PBXBuildFile; fileRef = FB03FC0E1E5AB5DC006DDDD1 /* MMChars.atlas */; };
+		FB5B6CC41E5B8377001D826A /* MMChars.atlas in Resources */ = {isa = PBXBuildFile; fileRef = FB5B6CC31E5B8377001D826A /* MMChars.atlas */; };
+		FB5B6CCA1E5B8EAA001D826A /* 3..2..1..Start 12.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FB5B6CC51E5B8EAA001D826A /* 3..2..1..Start 12.m4a */; };
+		FB5B6CCB1E5B8EAA001D826A /* gameOver.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FB5B6CC61E5B8EAA001D826A /* gameOver.m4a */; };
+		FB5B6CCC1E5B8EAA001D826A /* Pickle.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FB5B6CC71E5B8EAA001D826A /* Pickle.m4a */; };
+		FB5B6CCD1E5B8EAA001D826A /* picklePoint.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FB5B6CC81E5B8EAA001D826A /* picklePoint.m4a */; };
+		FB5B6CCE1E5B8EAA001D826A /* takeMeOutToTheBallGame.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FB5B6CC91E5B8EAA001D826A /* takeMeOutToTheBallGame.m4a */; };
+		FB5B6CD01E5B8FBD001D826A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB5B6CCF1E5B8FBD001D826A /* AVFoundation.framework */; };
 		FB78D9EC1E57DE5E001228E8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FB78D9EB1E57DE5E001228E8 /* main.m */; };
 		FB78D9EF1E57DE5E001228E8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FB78D9EE1E57DE5E001228E8 /* AppDelegate.m */; };
 		FB78D9F21E57DE5E001228E8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB78D9F11E57DE5E001228E8 /* ViewController.m */; };
@@ -45,7 +51,13 @@
 		FB03FC061E5AA85C006DDDD1 /* RWGameData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RWGameData.m; sourceTree = "<group>"; };
 		FB03FC0B1E5AB35D006DDDD1 /* MMCharSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMCharSelect.h; sourceTree = "<group>"; };
 		FB03FC0C1E5AB35D006DDDD1 /* MMCharSelect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMCharSelect.m; sourceTree = "<group>"; };
-		FB03FC0E1E5AB5DC006DDDD1 /* MMChars.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = MMChars.atlas; sourceTree = "<group>"; };
+		FB5B6CC31E5B8377001D826A /* MMChars.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = MMChars.atlas; sourceTree = "<group>"; };
+		FB5B6CC51E5B8EAA001D826A /* 3..2..1..Start 12.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = "3..2..1..Start 12.m4a"; sourceTree = "<group>"; };
+		FB5B6CC61E5B8EAA001D826A /* gameOver.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = gameOver.m4a; sourceTree = "<group>"; };
+		FB5B6CC71E5B8EAA001D826A /* Pickle.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = Pickle.m4a; sourceTree = "<group>"; };
+		FB5B6CC81E5B8EAA001D826A /* picklePoint.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = picklePoint.m4a; sourceTree = "<group>"; };
+		FB5B6CC91E5B8EAA001D826A /* takeMeOutToTheBallGame.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = takeMeOutToTheBallGame.m4a; sourceTree = "<group>"; };
+		FB5B6CCF1E5B8FBD001D826A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		FB78D9E71E57DE5E001228E8 /* Pickle-2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pickle-2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB78D9EB1E57DE5E001228E8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		FB78D9ED1E57DE5E001228E8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -73,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB5B6CD01E5B8FBD001D826A /* AVFoundation.framework in Frameworks */,
 				FB78DA1F1E57DF0E001228E8 /* SpriteKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -119,7 +132,12 @@
 		FB78D9E91E57DE5E001228E8 /* Pickle-2 */ = {
 			isa = PBXGroup;
 			children = (
-				FB03FC0E1E5AB5DC006DDDD1 /* MMChars.atlas */,
+				FB5B6CC51E5B8EAA001D826A /* 3..2..1..Start 12.m4a */,
+				FB5B6CC61E5B8EAA001D826A /* gameOver.m4a */,
+				FB5B6CC71E5B8EAA001D826A /* Pickle.m4a */,
+				FB5B6CC81E5B8EAA001D826A /* picklePoint.m4a */,
+				FB5B6CC91E5B8EAA001D826A /* takeMeOutToTheBallGame.m4a */,
+				FB5B6CC31E5B8377001D826A /* MMChars.atlas */,
 				FB78D9ED1E57DE5E001228E8 /* AppDelegate.h */,
 				FB78D9EE1E57DE5E001228E8 /* AppDelegate.m */,
 				FB78DA201E57F307001228E8 /* MainMenuScene.h */,
@@ -168,6 +186,7 @@
 		FB78DA1D1E57DF0E001228E8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				FB5B6CCF1E5B8FBD001D826A /* AVFoundation.framework */,
 				FB78DA1E1E57DF0E001228E8 /* SpriteKit.framework */,
 			);
 			name = Frameworks;
@@ -284,8 +303,13 @@
 			files = (
 				FB78D9FA1E57DE5E001228E8 /* LaunchScreen.storyboard in Resources */,
 				FB78DA241E57FD06001228E8 /* SIZED PICKLE ASSETS in Resources */,
-				FB03FC0F1E5AB5DC006DDDD1 /* MMChars.atlas in Resources */,
+				FB5B6CCC1E5B8EAA001D826A /* Pickle.m4a in Resources */,
+				FB5B6CCA1E5B8EAA001D826A /* 3..2..1..Start 12.m4a in Resources */,
+				FB5B6CCE1E5B8EAA001D826A /* takeMeOutToTheBallGame.m4a in Resources */,
 				FB78D9F71E57DE5E001228E8 /* Assets.xcassets in Resources */,
+				FB5B6CC41E5B8377001D826A /* MMChars.atlas in Resources */,
+				FB5B6CCB1E5B8EAA001D826A /* gameOver.m4a in Resources */,
+				FB5B6CCD1E5B8EAA001D826A /* picklePoint.m4a in Resources */,
 				FB78D9F51E57DE5E001228E8 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
