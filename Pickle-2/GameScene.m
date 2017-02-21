@@ -12,6 +12,7 @@
 #import <AVFoundation/AVAudioPlayer.h>
 #import "MainMenuScene.h"
 #import "textures.h"
+#import <math.h>
 
 
 
@@ -25,6 +26,10 @@
     
     self.characterAnimate = [self determineCharacterFrames];
     
+    self.shouldThrowBall = NO;
+    self.leftHasBall = NO;
+    self.rightHasBall = NO;
+    
     self.f1 = [SKTexture textureWithImageNamed:[self.characterAnimate objectAtIndex:0]];
     self.f2 = [SKTexture textureWithImageNamed:[self.characterAnimate objectAtIndex:1]];
     self.f3 = [SKTexture textureWithImageNamed:[self.characterAnimate objectAtIndex:2]];
@@ -35,82 +40,166 @@
     
     
     self.runAnimation = [SKAction animateWithTextures:self.charFrames timePerFrame:0.15];
-    self.moveRight = [SKAction moveByX:(10+self.playerSpeed) y:0 duration:0.2];
-    self.moveLeft = [SKAction moveByX:-(10 +self.playerSpeed) y:0 duration:0.2];
-    self.repeatAnimation = [SKAction repeatActionForever:self.runAnimation];
-    self.repeatMoveLeft = [SKAction repeatActionForever:self.moveLeft];
-    self.repeatMoveRight = [SKAction repeatActionForever:self.moveRight];
     
-    self.runGroup = [SKAction repeatActionForever:[SKAction group:@[self.repeatAnimation,self.repeatMoveRight]]];
+    self.repeatAnimation = [SKAction repeatActionForever:self.runAnimation];
+   
+    
+    self.runGroup = [SKAction repeatActionForever:[SKAction group:@[self.repeatAnimation]]];
     
     if (!self.contentCreated)
     {
         [self createSceneContents];
         self.contentCreated = YES;
     }
-    
+    [self.player runAction:self.runGroup];
     [self playerRunRight];
+    
+    
+    self.throwBallToLeft = [self tBTL];
+    self.throwBallToRight = [self tBTR];
+    
+    [self.ball runAction:self.throwBallToRight completion:^{
+        [self.ball runAction:self.throwBallToLeft];
+        //check if ball should be thrown
+        
+        [self checkthrow];
+            }];
+    
     
 }
 
-- (void)didFinishUpdate  //game logic
+- (void)didFinishUpdate  //game logic           //*********UPDATE*******//
 {
     
-   
-    
-    if(self.player.position.x > self.frame.size.width*0.75)
+    //check for point
+    if(self.player.position.x > self.frame.size.width*0.84)
     {
         self.playerFacingRight = NO;
         self.player.size = CGSizeMake(-1.5*self.x*0.15,1.5*self.y*0.27);
         self.playerSpeed++;
-        [self playerRun];
+        [self playerRunLeft];
+        //[self playerRunRight];
     }
-    if(self.player.position.x < self.frame.size.width*0.25)
+    if(self.player.position.x < self.frame.size.width*0.16)
     {
         self.playerFacingRight = YES;
         self.player.size = CGSizeMake(1.5*self.x*0.15,1.5*self.y*0.27);
         self.playerSpeed++;
-        [self playerRun];
+        [self playerRunRight];
+        //[self playerRunLeft];
     }
-
-    
-}
-
-
--(void)playerRun
-{
+    //decides which direction to run
     if(self.playerFacingRight)
     {
-        [self playerRunLeft];
-    } else
-    {
         [self playerRunRight];
+    } else{
+        [self playerRunLeft];
     }
-}
+    
+    //check for throw
+    if([self checkthrow])
+    {
+        if(self.leftHasBall)
+        {
+            self.leftHasBall = NO;
+            [self.ball runAction:self.throwBallToRight completion:^{
+                self.rightHasBall = YES;
+            }];
 
--(void)playerRunRight
+        } else if (self.rightHasBall){
+            self.rightHasBall = NO;
+            [self.ball runAction:self.throwBallToLeft completion:^{
+                self.leftHasBall = YES;
+            }];
+
+        }
+    }
+        
+    
+    
+}                                                   //*****UPDATE END*******//
+
+
+-(void)playerRunRight                       //*************MOVE PLAYER************//
 {
-   // self.player.removeAllActions;
-    self.runGroup = [SKAction repeatActionForever:[SKAction group:@[self.repeatAnimation,self.repeatMoveRight]]];
-    [self.player runAction:self.runGroup withKey:@"playerRunLeft"];
+    
+    self.player.position = CGPointMake((self.player.position.x + (1 + logf(self.playerSpeed))),self.y*0.13);
+    
 }
 
 -(void)playerRunLeft
 {
-    //self.player.remo;
-    self.runGroup = [SKAction repeatActionForever:[SKAction group:@[self.repeatAnimation,self.repeatMoveLeft]]];
-    [self.player runAction:self.runGroup withKey:@"playerRunRight"];
+  self.player.position = CGPointMake((self.player.position.x - (1 + logf(self.playerSpeed))),self.y*0.13);
 }
 
 
--(void)createSceneContents
+-(SKAction *)tBTL                       //****THROW BALL LEFT*****//
+{
+    //ballx and bally are the current pos of the ball
+    CGFloat ballTopy = self.y/3;
+    CGFloat ballTopx = self.x/2 - self.ball.position.x;
+    CGFloat ballendx = (self.rightBaseman.position.x + self.ball.size.width/3) - self.ball.position.x;
+    
+    
+    // CGFloat pathwidth = self.rightBaseman.position.x - self.leftBaseman.position.x;
+    
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, 0, 0);
+    CGPathAddQuadCurveToPoint(path, NULL, -ballTopx, ballTopy, -ballendx, 0);
+    SKAction *followline = [SKAction followPath:path asOffset:YES orientToPath:NO duration:5.0];
+    
+    SKAction *rotate = [SKAction repeatAction:[SKAction rotateByAngle:-2 duration:0.5 ]count:10];
+    SKAction *throwGroup = [SKAction group:@[followline,rotate]];
+    
+    return throwGroup;
+
+}
+-(SKAction *)tBTR                       //****THROW BALL LEFT*****//
+{
+    //ballx and bally are the current pos of the ball
+    CGFloat ballTopy = self.y/3;
+    CGFloat ballTopx = self.x/2 - self.ball.position.x;
+    CGFloat ballendx = (self.rightBaseman.position.x + self.ball.size.width/3) - self.ball.position.x;
+    
+   // CGFloat pathwidth = self.rightBaseman.position.x - self.leftBaseman.position.x;
+    
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGPathMoveToPoint(path, NULL, 0, 0);
+    CGPathAddQuadCurveToPoint(path, NULL, ballTopx, ballTopy, ballendx, 0);
+    SKAction *followline = [SKAction followPath:path asOffset:YES orientToPath:NO duration:5.0];
+    
+    SKAction *rotate = [SKAction repeatAction:[SKAction rotateByAngle:2 duration:0.5 ]count:10];
+    SKAction *throwGroup = [SKAction group:@[followline,rotate]];
+    
+    return throwGroup;
+}
+
+-(BOOL)checkthrow                           //**********CHECK TRHOW*********//
+{
+    if(self.rightHasBall && !self.playerFacingRight && self.player.position.x < self.x/2)
+    {
+        self.shouldThrowBall = YES;
+        return YES;
+    }
+    if(self.leftHasBall && self.playerFacingRight && self.player.position.x > self.x/2)
+    {
+        self.shouldThrowBall = YES;
+        return YES;
+    }
+    return NO;
+    
+}
+
+-(void)createSceneContents              //******CREATE SCENE FUNC*************//
 {
 
     [self addChild:[self addBackground]];
 
 }
 
--(SKSpriteNode *)addBackground
+-(SKSpriteNode *)addBackground          //**********ADD BACKGROUND*************//
 {
     
     SKSpriteNode *background = [[SKSpriteNode alloc] initWithImageNamed:@"AppBackground"];
@@ -119,35 +208,26 @@
     background.position = CGPointMake(0, 0);
     
     self.player = [self addPlayer];
-   // SKSpriteNode *leftBaseman = [self addLeftBaseman];
-    //SKSpriteNode *rightBaseman = [self addRightBaseman];
-    //SKSpriteNode *ball = [self addBall];
+    self.leftBaseman = [self addLeftBaseman];
+    self.rightBaseman = [self addRightBaseman];
+    self.ball = [self addBall];
     //SKSpriteNode *controls = [self addControls];
     //SKSpriteNode *gameOverButtons = [self addGameOverButtons];
     //SKSpriteNode *score = [self addScore];
     
     [background addChild:self.player];
+    [background addChild:self.leftBaseman];
+    [background addChild:self.rightBaseman];
+    [background addChild:self.ball];
     
     return background;
     
     
     
 }
--(CGFloat)getParentSizeX
-{
-    CGRect parentFrame = self.frame;
-    return CGRectGetMaxX(parentFrame);
-    
-    
-    
-}
--(CGFloat)getParentSizeY
-{
-    CGRect parentFrame = self.frame;
-    return CGRectGetMaxY(parentFrame);
-}
 
--(SKSpriteNode *)addPlayer
+
+-(SKSpriteNode *)addPlayer                   //**************PLAYER**********//
 {
     
     
@@ -159,26 +239,50 @@
     CGFloat y = [self getParentSizeY];
     SKSpriteNode *player = [[SKSpriteNode alloc] initWithImageNamed:self.characterAnimate[0]]; //self.characterAnimate[0]]
     NSLog(@"%@",self.characterAnimate[0]);
-    player.size = CGSizeMake(1.5*x*0.15,1.5*y*0.27);
+    player.size = CGSizeMake(1.5*self.x*0.15,1.5*self.y*0.27);
     player.position = CGPointMake(x/2, y*.13);
     
     return player;
     
     
 }
+
+-(SKSpriteNode *)addLeftBaseman                 //*********LEFT BASEMAN*******//
+{
+    SKSpriteNode *baseman = [[SKSpriteNode alloc] initWithImageNamed:@"Baseman"];
+    baseman.size = CGSizeMake(self.x*0.1, self.y*0.3);
+    baseman.anchorPoint = CGPointMake(1, 0);
+    baseman.position = CGPointMake(self.x*0.11, self.y*0.10);
+    
+    
+    return baseman;
+    
+}
+
+-(SKSpriteNode *)addRightBaseman                //********RIGHT BASEMAN**********//
+{
+    SKSpriteNode *baseman = [[SKSpriteNode alloc] initWithImageNamed:@"Baseman"];
+    baseman.size = CGSizeMake(-(self.x*0.1), self.y*0.3);
+    baseman.anchorPoint = CGPointMake(1, 0);
+    baseman.position = CGPointMake(self.x*0.89, self.y*0.10);
+    
+    
+    return baseman;
+}
+
+-(SKSpriteNode *)addBall                    //******************BALL*****************//
+{
+    SKSpriteNode *ball = [[SKSpriteNode alloc] initWithImageNamed:@"Baseball"];
+    ball.size = CGSizeMake(self.x*0.03, self.x*0.03);
+    ball.anchorPoint = CGPointMake(0.5, 0.5);
+    CGFloat bally = self.leftBaseman.size.height*0.65 + self.leftBaseman.position.y + ball.size.height/2;
+    CGFloat ballx = self.leftBaseman.position.x - ball.size.width/3;
+    ball.position = CGPointMake(ballx, bally);
+    
+    return ball;
+}
 /*
--(SKSpriteNode *)addLeftBaseman
-{
-    
-}
--(SKSpriteNode *)addRightBaseman
-{
-    
-}
--(SKSpriteNode *)addBall
-{
-    
-}-(SKSpriteNode *)addControls
+-(SKSpriteNode *)addControls
 {
     
 }
@@ -255,7 +359,19 @@
     
 }
 
-
+-(CGFloat)getParentSizeX
+{
+    CGRect parentFrame = self.frame;
+    return CGRectGetMaxX(parentFrame);
+    
+    
+    
+}
+-(CGFloat)getParentSizeY
+{
+    CGRect parentFrame = self.frame;
+    return CGRectGetMaxY(parentFrame);
+}
 
 
 

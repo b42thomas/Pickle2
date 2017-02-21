@@ -27,7 +27,7 @@
 @property CGFloat x;
 @property CGFloat y;
 
-@property int playerSpeed;
+@property CGFloat playerSpeed;
 
 @property SKAction *runAnimation;
 @property SKAction *moveRight;
@@ -37,8 +37,20 @@
 @property SKAction *repeatMoveLeft;
 @property SKAction *repeatMoveRight;
 
-@property SKSpriteNode *player;
+@property SKAction*throwBallToRight;
+@property SKAction*throwBallToLeft;
 
-@property BOOL playerFacingRight; 
+@property SKSpriteNode *player;
+@property SKSpriteNode *leftBaseman;
+@property SKSpriteNode *rightBaseman;
+@property SKSpriteNode *ball;
+
+@property BOOL playerFacingRight;
+@property BOOL shouldThrowBall;
+@property BOOL leftHasBall;
+@property BOOL rightHasBall;
+
+@property BOOL leftBasemanHasBall;
+@property BOOL rightBasemanHasBall;
 
 @end
