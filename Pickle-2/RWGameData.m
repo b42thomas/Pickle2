@@ -14,12 +14,44 @@
 
 
 
+- (instancetype)initWithCoder:(NSCoder *)decoder
+{
+    self = [self init];
+    if (self) {
+        _highScore = [decoder decodeDoubleForKey: SSGameDataHighScoreKey];
+        _characterIndex = [decoder decodeDoubleForKey: SSGameDataCharacterIndex];
+    }
+    return self;
+}
++(NSString*)filePath
+{
+    static NSString* filePath = nil;
+    if (!filePath) {
+        filePath =
+        [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
+         stringByAppendingPathComponent:@"gamedata"];
+    }
+    return filePath;
+}
+
++(instancetype)loadInstance
+{
+    NSData* decodedData = [NSData dataWithContentsOfFile: [RWGameData filePath]];
+    if (decodedData) {
+        RWGameData* gameData = [NSKeyedUnarchiver unarchiveObjectWithData:decodedData];
+        return gameData;
+    }
+    
+    return [[RWGameData alloc] init];
+}
+
+
 + (instancetype)sharedGameData {
     static id sharedInstance = nil;
     
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        sharedInstance = [[self alloc] init];
+        sharedInstance = [self loadInstance];
     });
     
     return sharedInstance;
@@ -30,6 +62,25 @@
     self.score = 0;
     self.characterIndex = 0;
 }
+
+static NSString* const SSGameDataHighScoreKey = @"highScore";
+static NSString* const SSGameDataCharacterIndex = @"characterIndex";
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeDouble:self.highScore forKey: SSGameDataHighScoreKey];
+    [encoder encodeDouble:self.characterIndex forKey: SSGameDataHighScoreKey];
+
+   
+}
+
+
+-(void)save
+{
+    NSData* encodedData = [NSKeyedArchiver archivedDataWithRootObject: self];
+    [encodedData writeToFile:[RWGameData filePath] atomically:YES];
+}
+
 
 
 

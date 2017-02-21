@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AVFoundation/AVAudioPlayer.h"
 
-@interface RWGameData : NSObject
+@interface RWGameData : NSObject <NSCoding>
 
 @property (assign, nonatomic) long score;
 @property (assign, nonatomic) long highScore;
@@ -28,5 +28,7 @@
 
 +(instancetype)sharedGameData;
 -(void)reset;
+
+-(void)save;
 
 @end

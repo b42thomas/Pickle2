@@ -16,6 +16,7 @@
 		FB5B6CCD1E5B8EAA001D826A /* picklePoint.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FB5B6CC81E5B8EAA001D826A /* picklePoint.m4a */; };
 		FB5B6CCE1E5B8EAA001D826A /* takeMeOutToTheBallGame.m4a in Resources */ = {isa = PBXBuildFile; fileRef = FB5B6CC91E5B8EAA001D826A /* takeMeOutToTheBallGame.m4a */; };
 		FB5B6CD01E5B8FBD001D826A /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB5B6CCF1E5B8FBD001D826A /* AVFoundation.framework */; };
+		FB5B6CD31E5B9E8E001D826A /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = FB5B6CD21E5B9E8E001D826A /* GameScene.m */; };
 		FB78D9EC1E57DE5E001228E8 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FB78D9EB1E57DE5E001228E8 /* main.m */; };
 		FB78D9EF1E57DE5E001228E8 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FB78D9EE1E57DE5E001228E8 /* AppDelegate.m */; };
 		FB78D9F21E57DE5E001228E8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB78D9F11E57DE5E001228E8 /* ViewController.m */; };
@@ -58,6 +59,9 @@
 		FB5B6CC81E5B8EAA001D826A /* picklePoint.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = picklePoint.m4a; sourceTree = "<group>"; };
 		FB5B6CC91E5B8EAA001D826A /* takeMeOutToTheBallGame.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = takeMeOutToTheBallGame.m4a; sourceTree = "<group>"; };
 		FB5B6CCF1E5B8FBD001D826A /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		FB5B6CD11E5B9E8E001D826A /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameScene.h; sourceTree = "<group>"; };
+		FB5B6CD21E5B9E8E001D826A /* GameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameScene.m; sourceTree = "<group>"; };
+		FB5B6CD41E5BB39A001D826A /* textures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = textures.h; sourceTree = "<group>"; };
 		FB78D9E71E57DE5E001228E8 /* Pickle-2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pickle-2.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB78D9EB1E57DE5E001228E8 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		FB78D9ED1E57DE5E001228E8 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -140,6 +144,9 @@
 				FB5B6CC31E5B8377001D826A /* MMChars.atlas */,
 				FB78D9ED1E57DE5E001228E8 /* AppDelegate.h */,
 				FB78D9EE1E57DE5E001228E8 /* AppDelegate.m */,
+				FB5B6CD11E5B9E8E001D826A /* GameScene.h */,
+				FB5B6CD21E5B9E8E001D826A /* GameScene.m */,
+				FB5B6CD41E5BB39A001D826A /* textures.h */,
 				FB78DA201E57F307001228E8 /* MainMenuScene.h */,
 				FB78DA211E57F307001228E8 /* MainMenuScene.m */,
 				FB03FC0B1E5AB35D006DDDD1 /* MMCharSelect.h */,
@@ -338,6 +345,7 @@
 				FB78D9F21E57DE5E001228E8 /* ViewController.m in Sources */,
 				FB03FC071E5AA85C006DDDD1 /* RWGameData.m in Sources */,
 				FB78D9EF1E57DE5E001228E8 /* AppDelegate.m in Sources */,
+				FB5B6CD31E5B9E8E001D826A /* GameScene.m in Sources */,
 				FB78DA221E57F307001228E8 /* MainMenuScene.m in Sources */,
 				FB78D9EC1E57DE5E001228E8 /* main.m in Sources */,
 				FB03FC0D1E5AB35D006DDDD1 /* MMCharSelect.m in Sources */,

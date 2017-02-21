@@ -10,7 +10,9 @@
 
 #import "MainMenuScene.h"
 #import "RWGameData.h"
-#import "AVFoundation/AVAudioPlayer.h"
+#import <AVFoundation/AVAudioPlayer.h>
+#import "GameScene.h"
+
 
 @interface MainMenuScene ()
 @property BOOL contentCreated;
@@ -18,8 +20,8 @@
 @property BOOL soundSettingsMenuVisible;
 @property BOOL characterMenuVisible;
 
-@property BOOL musicOn;
-@property BOOL soundOn;
+//@property BOOL musicOn;
+//@property BOOL soundOn;
 
 
 
@@ -85,6 +87,15 @@
             // move to game scene
             [[RWGameData sharedGameData].musicPlayer stop];
             [[RWGameData sharedGameData].soundPlayer play];
+            
+            //SKAction *moveSequence = [SKAction alloc];
+           
+                SKScene *gameScene  = [[GameScene alloc] initWithSize:self.size];
+                SKTransition *doors = [SKTransition doorsOpenVerticalWithDuration:0.5];
+                [self.view presentScene:gameScene transition:doors];
+            
+           // [self changeToGameScene];
+            
         }
         
         //***********SOUND SETTINGS******************
@@ -152,6 +163,13 @@
 }//end touchBegan
 
                                                             //*********END TOUCHES BEGAN*************//
+
+
+-(void)changeToGameScene
+{
+    
+    
+}
 
 //right button is pressed
 -(void)nextCharacter
@@ -225,7 +243,7 @@
     CGPoint gpos = CGPointMake( x*0.23, y*0.22);
     gear.position = gpos;
     //position for soundSettings and Character menu
-    CGPoint sspos = CGPointMake( x*0.25, y*0.25);
+   // CGPoint sspos = CGPointMake( x*0.25, y*0.25);
     //position for character Select button
     CGPoint csbpos = CGPointMake( x*0.73, y*0.22);
     characterSelectButton.position = csbpos;
@@ -243,7 +261,7 @@
     return mainMenu;
 }
 
-- (SKSpriteNode *)addPlayButton  //play button, needs a new image with white background
+- (SKSpriteNode *)addPlayButton  //play button, needs a new image that isjust a white button 
 {
     SKSpriteNode *playButton = [SKSpriteNode spriteNodeWithImageNamed:@"PlayButton"];
     [playButton setName:@"playButton"];

@@ -8,6 +8,8 @@
 
 #import <SpriteKit/SpriteKit.h>
 #import "AVFoundation/AVAudioPlayer.h"
+#import "GameScene.h"
+
 
 @interface MainMenuScene : SKScene
 
