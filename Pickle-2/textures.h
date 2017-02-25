@@ -57,4 +57,14 @@
 #define SPRITES_TEX_WIZARD_3 [SKTexture textureWithImageNamed:@"Wizard 9-3"]
 
 
+//GAME SCENE TEXTURES
+
+
+#define SPRITES_BALL [SKTexture textureWithImageNamed:@"Baseball"]
+#define SPRITES_BASEMAN [SKTexture textureWithImageNamed:@"Baseman"]
+//#define SPRITES_ARM [SKTexture textureWithImageNamed:@"ARM"]
+
+
+
+
 #endif /* textures_h */

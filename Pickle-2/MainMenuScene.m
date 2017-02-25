@@ -61,7 +61,7 @@
     [RWGameData sharedGameData].soundPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundUrl fileTypeHint:@"m4a" error:nil];
 
     [[RWGameData sharedGameData].musicPlayer prepareToPlay];
-    [[RWGameData sharedGameData].musicPlayer play];
+   // [[RWGameData sharedGameData].musicPlayer play];
     
     
 }
@@ -86,7 +86,7 @@
         if (touchedNode && [touchedNode.name isEqual:@"playButton"]) {
             // move to game scene
             [[RWGameData sharedGameData].musicPlayer stop];
-            [[RWGameData sharedGameData].soundPlayer play];
+            //[[RWGameData sharedGameData].soundPlayer play];
             
             //SKAction *moveSequence = [SKAction alloc];
            
