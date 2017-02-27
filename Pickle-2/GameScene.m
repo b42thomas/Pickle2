@@ -58,7 +58,7 @@ static const uint32_t gloveCategory        =  0x1 << 1;
     self.f4 = [SKTexture textureWithImageNamed:[self.characterAnimate objectAtIndex:1]];
     
     self.charFrames = @[self.f1,self.f2,self.f3,self.f4];
-    self.playerSpeed = 1;
+    self.points = 1;
     
     //Actions
     self.runAnimation = [SKAction animateWithTextures:self.charFrames timePerFrame:0.15];
@@ -91,7 +91,7 @@ static const uint32_t gloveCategory        =  0x1 << 1;
     self.runLeft = [self actionRunLeft];
     [self.player runAction:self.runGroup];
     //[self playerRunRight];
-    [self.player runAction:self.runRight withKey:@"changeDirectionL"];
+    [self.player runAction:self.runRight withKey:@"changeDirection"];
 
     
     //move ball
@@ -99,12 +99,14 @@ static const uint32_t gloveCategory        =  0x1 << 1;
     
     self.throwBallToLeft = [self tBTL];
     self.throwBallToRight = [self tBTR];
+    self.leftHasBall = YES;
     //self.throwBallToRight = [self.throwBallToLeft reversedAction];
-   
+   /*
     [self.ball runAction:self.throwBallToRight completion:^{
         [self checkthrow];
         self.rightHasBall = YES;
             }];
+    */
     
     //[self launchBall];
 }                                   //***************TOUCHES BEGAN************.//
@@ -121,17 +123,17 @@ static const uint32_t gloveCategory        =  0x1 << 1;
         {
             self.playerFacingRight = NO;
             self.player.size = CGSizeMake(-1.5*self.x*0.15,1.5*self.y*0.27);
-            [self.player removeActionForKey:@"ChangeDirectionL"];
+            [self.player removeActionForKey:@"ChangeDirection"];
             self.runLeft = [self actionRunLeft];
-            [self.player runAction:self.runLeft withKey:@"changeDirectionR"];
+            [self.player runAction:self.runLeft withKey:@"changeDirection"];
         }
         if([touchedNode.name  isEqual: @"rightButton"])
         {
             self.playerFacingRight = YES;
             self.player.size = CGSizeMake(1.5*self.x*0.15,1.5*self.y*0.27);
-            [self.player removeActionForKey:@"ChangeDirectionR"];
+            [self.player removeActionForKey:@"ChangeDirection"];
             self.runRight = [self actionRunRight];
-            [self.player runAction:self.runRight withKey:@"changeDirectionL"];
+            [self.player runAction:self.runRight withKey:@"changeDirection"];
         }
         
     }//end for loop
@@ -153,11 +155,13 @@ static const uint32_t gloveCategory        =  0x1 << 1;
         
         self.playerFacingRight = NO;
         self.player.size = CGSizeMake(-1.5*self.x*0.15,1.5*self.y*0.27);
-        self.playerSpeed++;
+        self.points++;
+        //self.throwBallToLeft = [self tBTL];
+       // self.throwBallToRight = [self tBTR];
        // [self playerRunLeft];
-        [self.player removeActionForKey:@"changeDirectionL"];
+        [self.player removeActionForKey:@"changeDirection"];
         self.runLeft = [self actionRunLeft];
-        [self.player runAction:self.runLeft withKey:@"changeDirectionR"];
+        [self.player runAction:self.runLeft withKey:@"changeDirection"];
          
     }
     if(self.player.position.x < self.frame.size.width*0.16)
@@ -165,11 +169,13 @@ static const uint32_t gloveCategory        =  0x1 << 1;
         
         self.playerFacingRight = YES;
         self.player.size = CGSizeMake(1.5*self.x*0.15,1.5*self.y*0.27);
-        self.playerSpeed++;
+        self.points++;
+        //self.throwBallToLeft = [self tBTL];
+       // self.throwBallToRight = [self tBTR];
         //[self playerRunRight];
-        [self.player removeActionForKey:@"changeDirectionR"];
+        [self.player removeActionForKey:@"changeDirection"];
         self.runRight = [self actionRunRight];
-        [self.player runAction:self.runRight withKey:@"changeDirectionL"];
+        [self.player runAction:self.runRight withKey:@"changeDirection"];
         
     }
     //decides which direction to run
@@ -184,7 +190,9 @@ static const uint32_t gloveCategory        =  0x1 << 1;
     
     
      //check throw
-    [self checkthrow];
+    if(self.leftHasBall || self.rightHasBall){
+        [self checkthrow];
+    }
     
     
 }                                                   //*****UPDATE END*******//
@@ -196,10 +204,10 @@ static const uint32_t gloveCategory        =  0x1 << 1;
     CGFloat dest = self.frame.size.width*0.84;
     CGFloat curr = self.player.position.x;
     CGFloat dist = dest - curr;
-    CGFloat speed = self.x*self.player.size.width*(logf(1 + self.playerSpeed));
+    CGFloat speed = self.x*self.player.size.width*(logf(1 + self.points/2));
     CGFloat baseDist = self.frame.size.width*0.84 - self.frame.size.width*0.16;
     CGFloat x = (baseDist/speed)*dist;
-    NSLog(@"x %f",x);
+    //NSLog(@"x %f",x);
     SKAction *runRight = [SKAction moveTo:CGPointMake(dest, self.player.position.y) duration:x];
     return runRight;
     
@@ -209,13 +217,13 @@ static const uint32_t gloveCategory        =  0x1 << 1;
     CGFloat dest = self.frame.size.width*0.16;
     CGFloat curr = self.player.position.x;
     CGFloat dist = curr - dest;
-    CGFloat speed = self.x*-self.player.size.width*(logf(1 + self.playerSpeed));
+    CGFloat speed = self.x*-self.player.size.width*(logf(1 + self.points/2));
     CGFloat baseDist = self.frame.size.width*0.84 - self.frame.size.width*0.16;
     CGFloat x = (baseDist/speed)*dist;
-    NSLog(@"curr %f",curr);
-    NSLog(@"dest %f",dest);
-    NSLog(@"dist %f",dist);
-    NSLog(@"x %f",x);
+   // NSLog(@"curr %f",curr);
+   // NSLog(@"dest %f",dest);
+   // NSLog(@"dist %f",dist);
+  //  NSLog(@"x %f",x);
     SKAction *runLeft = [SKAction moveTo:CGPointMake(dest, self.player.position.y) duration:x];
     return runLeft;
     
@@ -224,90 +232,29 @@ static const uint32_t gloveCategory        =  0x1 << 1;
 -(void)playerRunRight                       //*************MOVE PLAYER************//
 {
     
-    self.player.position = CGPointMake((self.player.position.x + (1 + logf(self.playerSpeed))),self.y*0.13);
+    self.player.position = CGPointMake((self.player.position.x + (1 + logf(self.points))),self.y*0.13);
     
 }
 
 -(void)playerRunLeft
 {
-  self.player.position = CGPointMake((self.player.position.x - (1 + logf(self.playerSpeed))),self.y*0.13);
+  self.player.position = CGPointMake((self.player.position.x - (1 + logf(self.points))),self.y*0.13);
 }
 
--(void)moveBallLeft
-{
-    CGFloat bally = self.leftBaseman.size.height*0.65 + self.leftBaseman.position.y + self.ball.size.height/2;
-    CGFloat ballx = self.leftBaseman.position.x - self.ball.size.width/3;
-    //NSLog(@"bally %f",bally);
-    
-    //CGFloat ymove = self.ball.position.y + 1*sin(self.ball.position.x*M_PI/(self.gloveDistance)+ballx);
-    //NSLog(@"bally %f",self.gloveDistance);
-    CGFloat ymove = pow((self.ball.position.x-self.x/2)/(self.x/(ballx/2)),2)*-1 + 2*bally +self.ball.size.height ;
-    NSLog(@"ymove %f",ymove);
-    
-    
-    self.ball.position = CGPointMake(self.ball.position.x - 2*(1 + logf(self.playerSpeed)),ymove);
-    
-
-    if(self.ball.position.x < self.leftBaseman.position.x){
-        self.leftHasBall = YES;
-        self.moving = NO;
-    }
-}
--(void)moveBallRight
-{
-   CGFloat bally = self.leftBaseman.size.height*0.65 + self.leftBaseman.position.y + self.ball.size.height/2;
-    CGFloat ballx1 = self.leftBaseman.position.x - self.ball.size.width/3;
-    CGFloat ballx2 = self.rightBaseman.position.x + self.ball.size.width/3;
-    //NSLog(@"bally %f",bally);
-    CGFloat x = self.ball.position.x - ballx1;
-    
-    CGFloat ymove = self.ball.position.y + -(1*sin((self.ball.position.x*2*M_PI/self.gloveDistance) - ballx1)) ;
-       //CGFloat ymove = self.ball.position.y ;
-    NSLog(@"ball pos x  %f",self.ball.position.x);
-    NSLog(@"ball pos y  %f",self.ball.position.y);
-   // CGFloat ymove =
-    
-    
-    self.ball.position = CGPointMake(self.ball.position.x + 2*(1 + logf(self.playerSpeed)),ymove);
-    
-    if(self.ball.position.x > self.rightBaseman.position.x+ self.ball.size.width/3){
-        self.rightHasBall = YES;
-        self.moving = NO;
-    }
-}
-
--(void)launchBall
-{
-    CGFloat d = self.rightBaseman.position.x - self.leftBaseman.position.x + self.ball.size.width;
-    CGFloat v = sqrtf((d*-(self.g))/2);
-    CGVector vector = CGVectorMake(v*10, 0);
-    self.ball.physicsBody.velocity = vector;
-    //[self.ball.physicsBody applyImpulse:vector];
-    
-    NSLog(@"launched ball %f", self.g);
-}
 
 -(SKAction *)tBTL                       //****THROW BALL LEFT*****//
 {
-    
-    CGSize ballSize = CGSizeMake(self.x*0.03, self.x*0.03);
-    CGFloat ballTopy = self.y/3;
-    CGFloat balldistx = (self.leftBaseman.position.x);
-    //int dur = 20*(1 + logf(self.playerSpeed)); //replace with global variable
-    int speed = 1.5*self.player.size.width*(1 + logf(self.playerSpeed));
-    CGFloat bally = self.rightBaseman.size.height*0.65 + self.rightBaseman.position.y + self.ball.size.height/2;
-    CGFloat ballx = self.rightBaseman.position.x - self.ball.size.width/3;
-    /*
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathMoveToPoint(path, NULL, ballx, bally);
-    CGPathAddQuadCurveToPoint(path, NULL, self.x/2, bally + 4*ballSize.height, balldistx, bally);
-    SKAction *followline = [SKAction followPath:path asOffset:NO orientToPath:NO speed:speed];
-    */
-    CGFloat dur = 2;
+       // NSLog(@"check 1");
+ 
+    CGFloat speed = self.x*self.player.size.width*(logf(1 + self.points));
+    CGFloat baseDist = self.frame.size.width*0.84 - self.frame.size.width*0.16;
+    CGFloat x = (baseDist/speed)*baseDist;
+   // NSLog(@"check 2");
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, NULL, 0, 0);
     CGPathAddQuadCurveToPoint(path, NULL, -self.gloveDistance/2, self.y-self.leftBaseman.size.height, -self.gloveDistance, 0);
-    SKAction *followline = [SKAction followPath:path asOffset:YES orientToPath:NO duration:dur];
+    SKAction *followline = [SKAction followPath:path asOffset:YES orientToPath:NO duration:x/2];
+   // NSLog(@"check 3");
     
     //CGFloat dist = self.rightBaseman.position.x - ballx;
 
@@ -315,28 +262,30 @@ static const uint32_t gloveCategory        =  0x1 << 1;
     
     int spins  = rand() % 8 + 4;
     float rads = 2*M_PI*spins;
-    SKAction *rotate = [SKAction repeatAction:[SKAction rotateByAngle:rads duration:dur ]count:1];
+    SKAction *rotate = [SKAction repeatAction:[SKAction rotateByAngle:rads duration:x/2 ]count:1];
 
      //SKAction *throwGroup = [SKAction group:@[followline]];
     SKAction *throwGroup = [SKAction group:@[followline,rotate]];
     
     CGPathRelease(path);
-    
+   // NSLog(@"check 4");
     return throwGroup;
 
 }
 -(SKAction *)tBTR                       //****THROW BALL RIGHT*****//
 {
+    NSLog(@"42.@@@");
     
-   
-    CGFloat dur = 1;
+    CGFloat speed = self.x*self.player.size.width*(logf(1 + self.points));
+    CGFloat baseDist = self.frame.size.width*0.84 - self.frame.size.width*0.16;
+    CGFloat x = (baseDist/speed)*baseDist;
     CGMutablePathRef path = CGPathCreateMutable();
     CGPathMoveToPoint(path, NULL, 0, 0);
     CGPathAddQuadCurveToPoint(path, NULL, self.gloveDistance/2, self.y-self.leftBaseman.size.height, self.gloveDistance, 0);
-    SKAction *followline = [SKAction followPath:path asOffset:YES orientToPath:NO duration:dur];
+    SKAction *followline = [SKAction followPath:path asOffset:YES orientToPath:NO duration:x/2];
     int spins  = rand() % 8 + 4;
     float rads = 2*M_PI*spins;
-    SKAction *rotate = [SKAction repeatAction:[SKAction rotateByAngle:rads duration:dur ]count:1];
+    SKAction *rotate = [SKAction repeatAction:[SKAction rotateByAngle:rads duration:x/2 ]count:1];
     SKAction *throwGroup = [SKAction group:@[followline,rotate]];
     
     CGPathRelease(path);
@@ -374,65 +323,53 @@ static const uint32_t gloveCategory        =  0x1 << 1;
         // NSLog(@"4");
      }
     */
-    
+    // NSLog(@"2");
+    // NSLog(@"leftHasBall %i", self.leftHasBall);
+    //NSLog(@"rightHasBall %i", self.rightHasBall);
     //check for throw
-    if(self.leftHasBall)
+    if(self.leftHasBall && self.playerFacingRight)
     {
-        self.leftHasBall = NO;
+        NSLog(@"42");
+        self.throwBallToRight = [self tBTR];
+        NSLog(@"42.1");
         [self.ball runAction:self.throwBallToRight completion:^{
             self.rightHasBall = YES;
             self.ball.zRotation = 0;
+            NSLog(@"4");
+            [self.ball runAction:[SKAction waitForDuration:0.1]];
+            
         }];
+        NSLog(@"42.2");
+        self.leftHasBall = NO;
+        NSLog(@"42.3");
         
-    } else if (self.rightHasBall)
+    } else if (self.rightHasBall && !self.playerFacingRight)
     {
-        self.rightHasBall = NO;
+        
+        self.throwBallToLeft = [self tBTL];
         [self.ball runAction:self.throwBallToLeft completion:^{
             self.leftHasBall = YES;
             self.ball.zRotation = 0;
+            NSLog(@"3");
+            [self.ball runAction:[SKAction waitForDuration:0.1]];
+            
         }];
+        self.rightHasBall = NO;
         
     }
     
-    
+
+        
 }
 
--(void)projectile:(SKSpriteNode *)ball didCollideWithGlove:(SKSpriteNode *)glove {
-    NSLog(@"Hit %f", self.ball.position.x);
-    //[ball removeFromParent];
-    //[glove removeFromParent];
-    //self.ball.physicsBody.dynamic = NO;
-}
-- (void)didBeginContact:(SKPhysicsContact *)contact
-{
-    // 1
-    SKPhysicsBody *firstBody, *secondBody;
-    
-    if (contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask)
-    {
-        firstBody = contact.bodyA;
-        secondBody = contact.bodyB;
-    }
-    else
-    {
-        firstBody = contact.bodyB;
-        secondBody = contact.bodyA;
-    }
-    
-    // 2
-    if ((firstBody.categoryBitMask & ballCategory) != 0 &&
-        (secondBody.categoryBitMask & gloveCategory) != 0)
-    {
-        [self projectile:(SKSpriteNode *) firstBody.node didCollideWithGlove:(SKSpriteNode *) secondBody.node];
-    }
-}
 
 
 -(void)createSceneContents              //******CREATE SCENE FUNC*************//
 {
     self.background = [self addBackground];
     [self addChild:self.background];
-    
+    self.ball = [self addBall];
+    [self addChild:self.ball];
     [self addChild:[self leftControl]];
     [self addChild:[self rightControl]];
 
@@ -449,7 +386,7 @@ static const uint32_t gloveCategory        =  0x1 << 1;
     self.player = [self addPlayer];
     self.leftBaseman = [self addLeftBaseman];
     self.rightBaseman = [self addRightBaseman];
-    self.ball = [self addBall];
+    //self.ball = [self addBall];
     
     //SKSpriteNode *controls = [self addControls];
     //SKSpriteNode *gameOverButtons = [self addGameOverButtons];
@@ -458,7 +395,7 @@ static const uint32_t gloveCategory        =  0x1 << 1;
     [background addChild:self.player];
     [background addChild:self.leftBaseman];
     [background addChild:self.rightBaseman];
-    [background addChild:self.ball];
+   // [background addChild:self.ball];
     
     
     
@@ -554,13 +491,7 @@ static const uint32_t gloveCategory        =  0x1 << 1;
     
     //ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:ball.size.width/3];
 
-    
-    ball.physicsBody = [SKPhysicsBody bodyWithCircleOfRadius:ball.size.width/3];
-    ball.physicsBody.dynamic = YES;
-    ball.physicsBody.categoryBitMask = ballCategory;
-    ball.physicsBody.contactTestBitMask = gloveCategory;
-    ball.physicsBody.collisionBitMask = 0;
-    ball.physicsBody.usesPreciseCollisionDetection = YES;
+    ball.name = @"ball";
     
     
     return ball;

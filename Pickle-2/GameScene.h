@@ -31,7 +31,8 @@
 @property CGFloat g;
 
 @property CGFloat gloveDistance;
-@property CGFloat playerSpeed;
+@property CGFloat points;
+//@property CGFloat speed;
 //@property CGFloat
 
 @property SKAction *runAnimation;
